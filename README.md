@@ -17,9 +17,9 @@ I find the "double exposure" photographic imaging technique inspiring: merging t
 From my research, if I want to implement the "double exposure" technique, using p5.js works very well. The “blend” feature in p5.js allows for the overlaying and blending of two images, simulating the effect of a double exposure. By carefully adjusting the blending mode and transparency level of each layer, I can achieve the desired effect of merging two visual effects into one. And the feature also offers the flexibility of different blending modes to create diverse and eye-catching results.
 
 - Part2-Example Image&Code Link/Ref:
-![image](image/part2_example1.png)
+![image](image/part2_example1.png)  
 [Example1CodeLink](https://codepen.io/giorgiomartini/pen/GvQVxy?editors=0010)
-![image](image/part2_example2.png)
+![image](image/part2_example2.png)  
 [Example2RefLink](https://p5js.org/reference/#/p5/blendMode)
-![image](image/part2_example3.png)
+![image](image/part2_example3.png)  
 [Example3RefLink](https://p5js.org/reference/#/p5/blend)
