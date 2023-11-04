@@ -6,12 +6,18 @@ let spacing = 30; // Define space between circles
 // Global variable to store the current state
 let operationMode = 'rotating'; // Initial state: not rotating
 
+// Global variables to store the mouse state
+let overCircle = false; // Circle rollover
+let locked = false; // Circle locked
+let yoffset = 0.0; // Offset for moving circle
+let xoffset = 0.0; // Offset for moving circle
+
 
 function setup() {
   // Create a canvas to fit the full window size and set the background color
   createCanvas(windowWidth, windowHeight);
   background('#194973');
-  noLoop(); // Prevent p5.js from continuously redrawing the canvas
+  // noLoop(); // Prevent p5.js from continuously redrawing the canvas
 
   circleDiameter = 200; // Define a fixed diameter for the circles
 
@@ -70,6 +76,12 @@ function drawPattern(pattern) {
 
 // Function to draw a still pattern which is Final Group Project Code
 function drawStillPattern(pattern){
+  
+  // Check if the mouse is over the circle
+  if(dist(mouseX, mouseY, pattern.x, pattern.y) < pattern.size / 2){
+    overCircle = true;
+  }
+  
   // Draw the outer "pearl necklace" chain around each circle with the new pattern
   let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
   let pearls = [1, 1, 1, 0]; // Define the pattern of pearls (1 small, 1 small, 1 small, 0 large, and so on)
@@ -164,19 +176,17 @@ function drawRotatingPattern(pattern){
 
   for(let i = 0; i < numCircle; i++){
 
-    // translate(pattern.x, pattern.y);
+    translate(pattern.x, pattern.y);
     rotate(rotateAngle);
-    // translate(-pattern.x, -pattern.y);
 
     let radius = startRadius - radiusStep * i;
     
     push();
     ellipse(pattern.x, pattern.y, radius * 2);
+    fill(random(255), random(255), random(255)); // Set the fill color for the circle
     pop();
 
     rotateAngle += 0.1;
-
-    fill(random(255), random(255), random(255)); // Set the fill color for the circle
   }
 }
 
@@ -191,9 +201,28 @@ function keyPressed(){
 }
 
 // Function to handle mouse presses
-// function mousePressed(){
-  
-// }
+function mousePressed(){
+  if(overCircle){
+    locked = true;
+  }else{
+    locked = false;
+  }
+  xoffset = mouseX - pattern.x;
+  yoffset = mouseY - pattern.y;
+}
+
+// Function to handle mouse drags
+function mouseDragged(){
+  if(locked){
+    pattern.x = mouseX - xoffset;
+    pattern.y = mouseY - yoffset;
+  }
+}
+
+// Function to handle mouse releases
+function mouseReleased(){
+  locked = false;
+}
 
 // Function to handle window resizing
 function windowResized() {
