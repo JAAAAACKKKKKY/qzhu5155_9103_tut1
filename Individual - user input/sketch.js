@@ -3,6 +3,9 @@ let patterns = [];
 let circleDiameter;
 let spacing = 30; // Define space between circles
 
+// Global variable to store the current state
+let operationMode = 'rotating'; // Initial state: not rotating
+
 
 function setup() {
   // Create a canvas to fit the full window size and set the background color
@@ -53,6 +56,20 @@ function setup() {
 // Function to draw an individual circle pattern
 function drawPattern(pattern) {
 
+  // Switch between the two states
+  switch(operationMode){
+    case 'still':
+      drawStillPattern(pattern);
+      break;
+    
+    case 'rotating':
+      drawRotatingPattern(pattern);
+      break;
+  }
+}
+
+// Function to draw a still pattern which is Final Group Project Code
+function drawStillPattern(pattern){
   // Draw the outer "pearl necklace" chain around each circle with the new pattern
   let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
   let pearls = [1, 1, 1, 0]; // Define the pattern of pearls (1 small, 1 small, 1 small, 0 large, and so on)
@@ -136,6 +153,47 @@ function drawPattern(pattern) {
   }
 }
 
+// Function to draw a rotating pattern
+function drawRotatingPattern(pattern){
+  // Draw the circle with the new pattern
+  let numCircle = 5; // Number of circles
+  let startRadius = 100; // Initial radius
+  let radiusStep = 20; // Decreasing radius
+
+  let rotateAngle = 0;
+
+  for(let i = 0; i < numCircle; i++){
+
+    // translate(pattern.x, pattern.y);
+    rotate(rotateAngle);
+    // translate(-pattern.x, -pattern.y);
+
+    let radius = startRadius - radiusStep * i;
+    
+    push();
+    ellipse(pattern.x, pattern.y, radius * 2);
+    pop();
+
+    rotateAngle += 0.1;
+
+    fill(random(255), random(255), random(255)); // Set the fill color for the circle
+  }
+}
+
+// Function to handle key presses
+function keyPressed(){
+  if(key === 's'){
+    operationMode = 'still';
+  }
+  if(key === 'r'){
+    operationMode = 'rotating';
+  }
+}
+
+// Function to handle mouse presses
+// function mousePressed(){
+  
+// }
 
 // Function to handle window resizing
 function windowResized() {
