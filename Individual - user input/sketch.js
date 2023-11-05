@@ -15,6 +15,7 @@ let xoffset = 0.0; // Offset for moving circle
 
 let tempPattern = undefined; // Temporary pattern
 
+let easing = 0.05; // Easing value
 
 function setup() {
   // Create a canvas to fit the full window size and set the background color
@@ -404,12 +405,29 @@ function drawEasingPattern(pattern){
   let numCircle = 5; // Number of circles
   let startRadius = 100; // Initial radius
   let radiusStep = 20; // Decreasing radius
+
+  // Create a variable to store the circle size
+  let circleSize = random(pattern.size / 2);
+  let circleSizeTarget = random(pattern.size / 2);
+  let nextChange = 0;
+  let changeInterval = 1000; // 1秒
+
+  nextChange = millis() + changeInterval;
+
   for(let i = 0; i < numCircle; i++){
     let radius = startRadius - radiusStep * i;
-    ellipse(pattern.x, pattern.y, radius * 2);
+    ellipse(pattern.x, pattern.y, circleSize * 2);
     fill(pattern.color); // Set the fill color for the circle
   }
   
+  if(millis() > nextChange){
+    nextChange += changeInterval;
+    // code I place here runs once per second.
+    circleSizeTarget = random(pattern.size / e);
+  }
+
+  circleSize = lerp(circleSize, circleSizeTarget, 0.1);
+
   // Draw the inner shapes with the new pattern
   let numShapes = 20; // Set the number of shapes in each circle
   push();
@@ -448,7 +466,7 @@ function drawEasingPattern(pattern){
         }
 
       } else if(pattern.type === 2) {
-        
+
         // Draw eight circles with linearly increasing radius
         for(let j = 0; j < 8; j ++){
           let radius = 6 * j;
@@ -456,7 +474,7 @@ function drawEasingPattern(pattern){
           stroke(random(255), random(255), random(255)); // Set the colour of the internal shape stroke
           ellipse(0, 0, radius);
         }
-        
+
         stroke(0); // Restore stroke colour
         drawSawtoothRing(0, 0, pattern.size /3, 20, pattern.size/2*0.35); // Draw a swatooth ring
       }
