@@ -369,6 +369,204 @@ function drawRotatePattern(pattern){
   
 }
 
+// Function to draw a easing pattern in the circle when mouse hover
+function drawEasingPattern(pattern){
+
+  // background('#194973');
+
+  frameRate(10);
+  // Draw the outer "pearl necklace" chain around each circle with the new pattern
+  let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
+  let pearls = [1, 1, 1, 0]; // Define the pattern of pearls (1 small, 1 small, 1 small, 0 large, and so on)
+  let pearlIndex = 0;
+
+  let numPearls = TWO_PI * outerRadius / 20;
+  push();
+  translate(pattern.x, pattern.y);
+  rotate(frameCount / 50.0);
+  for (let i = 0; i < numPearls; i++) {
+    let angle = i * TWO_PI / numPearls;
+    let pearlX =  outerRadius * cos(angle);
+    let pearlY =  outerRadius * sin(angle);
+
+    if (pearls[pearlIndex] === 1) {
+      fill(random(255), random(255), random(255)); // Set the fill color for the small pearls
+      ellipse(pearlX, pearlY, 10); // Draw a small pearl
+    } else {
+      fill(255); // Set the fill color for the large pearls
+      ellipse(pearlX, pearlY, 20); // Draw a large pearl
+    }
+
+    pearlIndex = (pearlIndex + 1) % pearls.length; // Move to the next pattern element
+  }
+
+  pop();
+  
+  // Draw the circle with the new pattern
+  let numCircle = 5; // Number of circles
+  let startRadius = 100; // Initial radius
+  let radiusStep = 20; // Decreasing radius
+  for(let i = 0; i < numCircle; i++){
+    let radius = startRadius - radiusStep * i;
+    ellipse(pattern.x, pattern.y, radius * 2);
+    fill(pattern.color); // Set the fill color for the circle
+  }
+  
+  // Draw the inner shapes with the new pattern
+  let numShapes = 20; // Set the number of shapes in each circle
+  push();
+  translate(pattern.x, pattern.y);
+  rotate( - frameCount / 50.0);
+  for(let i = 0; i < numShapes; i++) {
+    for(let j = 0; j < 5; j++){
+      let angle = TWO_PI / numShapes * i;
+      let shapeX =  (pattern.size / 2 - 10 * j) * cos(angle);
+      let shapeY =  (pattern.size / 2 - 10 * j) * sin(angle);
+      fill(pattern.dotColor); // Set the fill color for the inner shapes
+
+      // Depending on the design type
+      if (pattern.type === 0) {
+        // Draw five small circles of radius 5 inside each circle
+        ellipse(shapeX, shapeY, 5);
+
+      } else if(pattern.type === 1) {
+        
+        // Draw five small circles of radius 5 inside each circle
+        for(let j = 0; j < 5; j ++){
+          let angle = TWO_PI / numShapes * i;
+          let shapeX1 =  (pattern.size / 2 * 0.6 - 10 * j) * cos(angle);
+          let shapeY1 =  (pattern.size / 2 * 0.6 - 10 * j) * sin(angle);
+          fill(pattern.dotColor); // Set the fill color for the inner shapes
+          ellipse(shapeX1, shapeY1, 5);
+        }
+        
+        // Draw five small circles of radius 5 inside each circle and arrange them neatly
+        for(let j = 0; j < 5; j ++){
+          let angle = TWO_PI / numShapes * i;
+          let shapeX2 =  (pattern.size / 2 - 5 * j) * cos(angle);
+          let shapeY2 =  (pattern.size / 2 - 5 * j) * sin(angle);
+          fill(pattern.dotColor); // Set the fill color for the inner shapes
+          ellipse(shapeX2, shapeY2, 5);
+        }
+
+      } else if(pattern.type === 2) {
+        
+        // Draw eight circles with linearly increasing radius
+        for(let j = 0; j < 8; j ++){
+          let radius = 6 * j;
+          noFill();
+          stroke(random(255), random(255), random(255)); // Set the colour of the internal shape stroke
+          ellipse(0, 0, radius);
+        }
+        
+        stroke(0); // Restore stroke colour
+        drawSawtoothRing(0, 0, pattern.size /3, 20, pattern.size/2*0.35); // Draw a swatooth ring
+      }
+    }
+  }
+  pop();
+  
+}
+
+// Function to draw a moving pattern when mouse pressed
+function drawMovingPattern(pattern){
+
+  // background('#194973');
+
+  frameRate(10);
+  // Draw the outer "pearl necklace" chain around each circle with the new pattern
+  let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
+  let pearls = [1, 1, 1, 0]; // Define the pattern of pearls (1 small, 1 small, 1 small, 0 large, and so on)
+  let pearlIndex = 0;
+
+  let numPearls = TWO_PI * outerRadius / 20;
+  push();
+  translate(pattern.x, pattern.y);
+  rotate(frameCount / 50.0);
+  for (let i = 0; i < numPearls; i++) {
+    let angle = i * TWO_PI / numPearls;
+    let pearlX =  outerRadius * cos(angle);
+    let pearlY =  outerRadius * sin(angle);
+
+    if (pearls[pearlIndex] === 1) {
+      fill(random(255), random(255), random(255)); // Set the fill color for the small pearls
+      ellipse(pearlX, pearlY, 10); // Draw a small pearl
+    } else {
+      fill(255); // Set the fill color for the large pearls
+      ellipse(pearlX, pearlY, 20); // Draw a large pearl
+    }
+
+    pearlIndex = (pearlIndex + 1) % pearls.length; // Move to the next pattern element
+  }
+
+  pop();
+  
+  // Draw the circle with the new pattern
+  let numCircle = 5; // Number of circles
+  let startRadius = 100; // Initial radius
+  let radiusStep = 20; // Decreasing radius
+  for(let i = 0; i < numCircle; i++){
+    let radius = startRadius - radiusStep * i;
+    ellipse(pattern.x, pattern.y, radius * 2);
+    fill(pattern.color); // Set the fill color for the circle
+  }
+  
+  // Draw the inner shapes with the new pattern
+  let numShapes = 20; // Set the number of shapes in each circle
+  push();
+  translate(pattern.x, pattern.y);
+  rotate( - frameCount / 50.0);
+  for(let i = 0; i < numShapes; i++) {
+    for(let j = 0; j < 5; j++){
+      let angle = TWO_PI / numShapes * i;
+      let shapeX =  (pattern.size / 2 - 10 * j) * cos(angle);
+      let shapeY =  (pattern.size / 2 - 10 * j) * sin(angle);
+      fill(pattern.dotColor); // Set the fill color for the inner shapes
+
+      // Depending on the design type
+      if (pattern.type === 0) {
+        // Draw five small circles of radius 5 inside each circle
+        ellipse(shapeX, shapeY, 5);
+
+      } else if(pattern.type === 1) {
+        
+        // Draw five small circles of radius 5 inside each circle
+        for(let j = 0; j < 5; j ++){
+          let angle = TWO_PI / numShapes * i;
+          let shapeX1 =  (pattern.size / 2 * 0.6 - 10 * j) * cos(angle);
+          let shapeY1 =  (pattern.size / 2 * 0.6 - 10 * j) * sin(angle);
+          fill(pattern.dotColor); // Set the fill color for the inner shapes
+          ellipse(shapeX1, shapeY1, 5);
+        }
+        
+        // Draw five small circles of radius 5 inside each circle and arrange them neatly
+        for(let j = 0; j < 5; j ++){
+          let angle = TWO_PI / numShapes * i;
+          let shapeX2 =  (pattern.size / 2 - 5 * j) * cos(angle);
+          let shapeY2 =  (pattern.size / 2 - 5 * j) * sin(angle);
+          fill(pattern.dotColor); // Set the fill color for the inner shapes
+          ellipse(shapeX2, shapeY2, 5);
+        }
+
+      } else if(pattern.type === 2) {
+        
+        // Draw eight circles with linearly increasing radius
+        for(let j = 0; j < 8; j ++){
+          let radius = 6 * j;
+          noFill();
+          stroke(random(255), random(255), random(255)); // Set the colour of the internal shape stroke
+          ellipse(0, 0, radius);
+        }
+        
+        stroke(0); // Restore stroke colour
+        drawSawtoothRing(0, 0, pattern.size /3, 20, pattern.size/2*0.35); // Draw a swatooth ring
+      }
+    }
+  }
+  pop();
+  
+}
+
 // Function to handle key presses
 function keyPressed(){
   if(key === 's'){
@@ -377,6 +575,10 @@ function keyPressed(){
     operationMode = 'rotate';
   }else if(key === 'c'){
     operationMode = 'changeColor';
+  }else if(key === 'e'){
+    operationMode = 'easing';
+  }else if(key === 'm'){
+    operationMode = 'moving';
   }
 }
 
