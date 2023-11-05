@@ -3,7 +3,7 @@ let patterns = [];
 let circleDiameter;
 let spacing = 30; // Define space between circles
 
-let islooping = false; // Initial state: not looping at start
+// let islooping = false; // Initial state: not looping at start
 
 // Global variable to store the current state
 let operationMode = 'still'; // Initial state: not rotating
@@ -23,7 +23,7 @@ function setup() {
 
   circleDiameter = 200; // Define a fixed diameter for the circles
 
-  frameRate(8); // Set the frame rate to 20 frames per second
+  frameRate(10); // Set the frame rate to 20 frames per second
 
   // Calculate the number of circles that can fit in the canvas width (columns) and height (rows)
   let cols = ceil(width / (circleDiameter + spacing));
@@ -60,6 +60,13 @@ function setup() {
 
 // Use Function draw() to draw the animation
 function draw(){
+  
+  // if(islooping){
+  //   loop();
+  // }else{
+  //   noLoop();
+  // }
+
   // Switch between the two states
   switch(operationMode){
     case 'still':
@@ -68,17 +75,24 @@ function draw(){
       }
       break;
     
-    case 'rotating':
+    case 'changeColor':
       for(let pattern of patterns){
-        drawRotatingPattern(pattern);
+        // push();
+        // translate(pattern.x, pattern.y);
+        // rotate(rotateAngle);
+
+        drawColorPattern(pattern);
+        // pop();
       }
+
+      // rotateAngle += 0.1;
       break;
   }
 }
 
 // Function to draw a still pattern which is Final Group Project Code
 function drawPattern(pattern){
-  // noLoop(); // Prevent p5.js from continuously redrawing the canvas
+  noLoop(); // Prevent p5.js from continuously redrawing the canvas
   
   // Draw the outer "pearl necklace" chain around each circle with the new pattern
   let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
@@ -164,13 +178,14 @@ function drawPattern(pattern){
 }
 
 // Function to draw a rotating pattern
-function drawRotatingPattern(pattern){
+function drawColorPattern(pattern){
   // Draw the outer "pearl necklace" chain around each circle with the new pattern
   let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
   let pearls = [1, 1, 1, 0]; // Define the pattern of pearls (1 small, 1 small, 1 small, 0 large, and so on)
   let pearlIndex = 0;
 
   let numPearls = TWO_PI * outerRadius / 20;
+
   for (let i = 0; i < numPearls; i++) {
     let angle = i * TWO_PI / numPearls;
     let pearlX = pattern.x + outerRadius * cos(angle);
@@ -193,32 +208,32 @@ function keyPressed(){
   if(key === 's'){
     operationMode = 'still';
   }
-  if(key === 'r'){
-    operationMode = 'rotating';
-  }
 }
 
 // Function to handle mouse presses
 function mousePressed(){
-  islooping = !islooping;
-  if(!islooping){
-    loop();
-  }else{
-    noloop();
+  // isLooping = !isLooping; // Toggle the animation loop state
+}
+
+function mouseClicked() {
+  if (operationMode === 'still') {
+    operationMode = 'changeColor';
+    loop(); // stop the animation loop
   }
+  // else if (operationMode === 'rotating') {
+  //   operationMode = 'still';
+  //   noLoop(); // start the animation loop (could use the key and mouse to control)
+  // }
 }
 
 // Function to handle mouse drags
 function mouseDragged(){
-  if(locked){
-    pattern.x = mouseX - xoffset;
-    pattern.y = mouseY - yoffset;
-  }
+
 }
 
 // Function to handle mouse releases
 function mouseReleased(){
-  locked = false;
+  
 }
 
 // Function to handle window resizing
