@@ -98,7 +98,7 @@ function draw(){
   }
 }
 
-// Function to draw a still pattern which is Final Group Project Code
+// Function to draw a still pattern - Final Group Project Code
 function drawPattern(pattern){
   noLoop(); // Prevent p5.js from continuously redrawing the canvas
   
@@ -188,7 +188,8 @@ function drawPattern(pattern){
 // Function to draw color change pattern
 function drawColorPattern(pattern){
 
-  frameRate(7);
+  frameRate(7); // Set the frame rate to 7 frames per second
+
   // Draw the outer "pearl necklace" chain around each circle with the new pattern
   let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
   let pearls = [1, 1, 1, 0]; // Define the pattern of pearls (1 small, 1 small, 1 small, 0 large, and so on)
@@ -283,6 +284,8 @@ function drawRotatePattern(pattern){
   let pearlIndex = 0;
 
   let numPearls = TWO_PI * outerRadius / 20;
+
+  // Rotate the pearls around the circle
   push();
   translate(pattern.x, pattern.y);
   rotate(frameCount / 50.0);
@@ -316,6 +319,8 @@ function drawRotatePattern(pattern){
   
   // Draw the inner shapes with the new pattern
   let numShapes = 20; // Set the number of shapes in each circle
+
+  // Rotate the inner shapes around the circle
   push();
   translate(pattern.x, pattern.y);
   rotate( - frameCount / 50.0);
@@ -373,7 +378,6 @@ function drawRotatePattern(pattern){
 // Function to draw a easing pattern in the circle when mouse hover
 function drawEasingPattern(pattern){
 
-  frameRate(10);
   // Draw the outer "pearl necklace" chain around each circle with the new pattern
   let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
   let pearls = [1, 1, 1, 0]; // Define the pattern of pearls (1 small, 1 small, 1 small, 0 large, and so on)
@@ -407,25 +411,25 @@ function drawEasingPattern(pattern){
   let radiusStep = 20; // Decreasing radius
 
   // Create a variable to store the circle size
-  let circleSize = random(pattern.size / 2);
-  let circleSizeTarget = random(pattern.size / 2);
-  let nextChange = 0;
-  let changeInterval = 1000; // 1秒
+  let circleSize = random(pattern.size / 2); // Set the initial size of the circle
+  let circleSizeTarget = random(pattern.size / 2); // Set the target size of the circle
+  let nextChange = 0; // Set the time of the next change
+  let changeInterval = 1000; // 1 second
 
   nextChange = millis() + changeInterval;
 
   for(let i = 0; i < numCircle; i++){
-    let radius = startRadius - radiusStep * i;
     ellipse(pattern.x, pattern.y, circleSize * 2);
-    fill(pattern.color); // Set the fill color for the circle
+    fill(pattern.color);
   }
   
+  // Change the circle size every second
   if(millis() > nextChange){
     nextChange += changeInterval;
-    // code I place here runs once per second.
     circleSizeTarget = random(pattern.size / e);
   }
 
+  // Ease the circle size towards the target size
   circleSize = lerp(circleSize, circleSizeTarget, 0.1);
 
   // Draw the inner shapes with the new pattern
@@ -487,7 +491,8 @@ function drawEasingPattern(pattern){
 // Function to draw a moving pattern when mouse pressed
 function drawMovingPattern(pattern){
 
-  frameRate(10);
+  frameRate(10); // Set the frame rate to 20 frames per second
+
   // Draw the outer "pearl necklace" chain around each circle with the new pattern
   let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
   let pearls = [1, 1, 1, 0]; // Define the pattern of pearls (1 small, 1 small, 1 small, 0 large, and so on)
@@ -496,6 +501,8 @@ function drawMovingPattern(pattern){
   let d = dist(mouseX, mouseY, pattern.x, pattern.y);
   
   let numPearls = TWO_PI * outerRadius / 20;
+  
+  // Rotate the pearls around the circle
   push();
   translate(pattern.x, pattern.y);
   rotate(frameCount / 50.0);
@@ -518,7 +525,6 @@ function drawMovingPattern(pattern){
   pop();
 
   // Check the mouse position in the range of the circle
-
   if(d < pattern.size / 2){
     overCircle = true;
     tempPattern = pattern;
@@ -544,6 +550,8 @@ function drawMovingPattern(pattern){
   
   // Draw the inner shapes with the new pattern
   let numShapes = 20; // Set the number of shapes in each circle
+
+  // Rotate the inner shapes around the circle
   push();
   translate(pattern.x, pattern.y);
   rotate( - frameCount / 50.0);
@@ -595,10 +603,14 @@ function drawMovingPattern(pattern){
     }
   }
   pop();
-  
 }
 
 // Function to handle key presses
+// Press 's' to stop the animation
+// Press 'r' to rotate the animation
+// Press 'c' to change the color of the animation
+// Press 'e' to ease the circle size
+// Press 'm' to move the pattern in the rotation
 function keyPressed(){
   if(key === 's'){
     operationMode = 'still';
@@ -614,13 +626,11 @@ function keyPressed(){
 }
 
 // Function to handle mouse clicks
+// Click to start the animation - noLoop() is disabled
 function mouseClicked() {
   if (operationMode === 'still') {
     operationMode = 'changeColor';
-    loop(); // stop the animation loop
-  }else if(operationMode === 'rotate'){
-    operationMode = 'changeColor';
-    loop();
+    loop(); // start the animation loop
   }
 }
 // Function to handle mouse presses
@@ -631,6 +641,7 @@ function mousePressed(){
     locked = false;
   }
 
+  // Calculate the offset between the mouse position and the circle position
   if(tempPattern){
     xoffset = mouseX - tempPattern.x;
     yoffset = mouseY - tempPattern.y;
@@ -640,6 +651,7 @@ function mousePressed(){
 
 // Function to handle mouse drags
 function mouseDragged(){
+  // Move the circle to the mouse position
   if(locked && tempPattern){
     tempPattern.x = mouseX - xoffset;
     tempPattern.y = mouseY - yoffset;
@@ -661,7 +673,7 @@ function windowResized() {
 
 // Function to draw a swatooth ring
 function drawSawtoothRing(cx, cy, radius, teeth, toothHeight){
-  let angleIncrement = TWO_PI/teeth;
+  let angleIncrement = TWO_PI/teeth; // Calculate the angle increment between each tooth
 
   beginShape();
   for (let i = 0; i < teeth; i++) {
