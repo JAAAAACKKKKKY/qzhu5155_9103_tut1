@@ -4,11 +4,11 @@ This is a repo that I will use to do the Assignment and Quiz!
 
 ## Assignment Interactive Tips
 
-*User - Input 1: Mouse Click
+*User - Input 1: Mouse Click*
 
 Use the mouse to click the interface to cancel noLoop() and start the animation below.
 
-*User - Input 2: KeyBoard
+*User - Input 2: KeyBoard*
 
 Control different modes of animation via keyboard.
 
@@ -18,14 +18,14 @@ Control different modes of animation via keyboard.
 - Press 'c' to animate Color Change mode
 - Press 's' to stop the animation (reset to noLoop() again, need to repeat operation User-Input 1 to stop noLoop())
 
-*User - Input 3: Mouse Pressed & Move In Interactive Move Mode
+*User - Input 3: Mouse Pressed & Move In Interactive Move Mode*
 
 When the operating mode is on 'm', change the position of the big circle with the mouse.
 
 - Hovering the mouse on any big circle will display a white line, and moving it away will return it to its original state.
 - Press and hold the mouse on the selected big circle and drag it to move it freely.
 
-*Group Code Image & Individual Code Display Video
+*Group Code Image & Individual Code Display Video*
 
 ![image](image/final_group_code_showout.png)
 
