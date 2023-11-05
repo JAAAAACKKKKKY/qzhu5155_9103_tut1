@@ -7,11 +7,13 @@ let spacing = 30; // Define space between circles
 // Global variable to store the current state
 let operationMode = 'still'; // Initial state: not rotating
 
-// // Global variables to store the mouse state
-// let overCircle = false; // Circle rollover
-// let locked = false; // Circle locked
-// let yoffset = 0.0; // Offset for moving circle
-// let xoffset = 0.0; // Offset for moving circle
+// Global variables to store the mouse state
+let overCircle = false; // Circle rollover
+let locked = false; // Circle locked
+let yoffset = 0.0; // Offset for moving circle
+let xoffset = 0.0; // Offset for moving circle
+
+let tempPattern = undefined; // Temporary pattern
 
 
 function setup() {
@@ -273,8 +275,6 @@ function drawColorPattern(pattern){
 // Function to draw a rotating pattern
 function drawRotatePattern(pattern){
 
-  // background('#194973');
-
   frameRate(10);
   // Draw the outer "pearl necklace" chain around each circle with the new pattern
   let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
@@ -371,8 +371,6 @@ function drawRotatePattern(pattern){
 
 // Function to draw a easing pattern in the circle when mouse hover
 function drawEasingPattern(pattern){
-
-  // background('#194973');
 
   frameRate(10);
   // Draw the outer "pearl necklace" chain around each circle with the new pattern
@@ -471,14 +469,14 @@ function drawEasingPattern(pattern){
 // Function to draw a moving pattern when mouse pressed
 function drawMovingPattern(pattern){
 
-  // background('#194973');
-
   frameRate(10);
   // Draw the outer "pearl necklace" chain around each circle with the new pattern
   let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
   let pearls = [1, 1, 1, 0]; // Define the pattern of pearls (1 small, 1 small, 1 small, 0 large, and so on)
   let pearlIndex = 0;
-
+  
+  let d = dist(mouseX, mouseY, pattern.x, pattern.y);
+  
   let numPearls = TWO_PI * outerRadius / 20;
   push();
   translate(pattern.x, pattern.y);
@@ -500,6 +498,21 @@ function drawMovingPattern(pattern){
   }
 
   pop();
+
+  // Check the mouse position in the range of the circle
+
+  if(d < pattern.size / 2){
+    overCircle = true;
+    tempPattern = pattern;
+    if(locked = false){
+      stroke(0);
+    }else if(locked = true){
+      stroke(255);
+    }
+  }else if(d > pattern.size / 2){
+    overCircle = false;
+    stroke(0);
+  }
   
   // Draw the circle with the new pattern
   let numCircle = 5; // Number of circles
@@ -594,17 +607,30 @@ function mouseClicked() {
 }
 // Function to handle mouse presses
 function mousePressed(){
+  if(overCircle){
+    locked = true;
+  }else{
+    locked = false;
+  }
 
+  if(tempPattern){
+    xoffset = mouseX - tempPattern.x;
+    yoffset = mouseY - tempPattern.y;
+  }
+  
 }
 
 // Function to handle mouse drags
 function mouseDragged(){
-
+  if(locked && tempPattern){
+    tempPattern.x = mouseX - xoffset;
+    tempPattern.y = mouseY - yoffset;
+  }
 }
 
 // Function to handle mouse releases
 function mouseReleased(){
-  
+  locked = false;
 }
 
 // Function to handle window resizing
