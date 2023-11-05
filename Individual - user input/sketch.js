@@ -80,6 +80,18 @@ function draw(){
         drawRotatePattern(pattern);
       }
       break;
+
+    case 'easing':
+      for(let pattern of patterns){
+        drawEasingPattern(pattern);
+      }
+      break;
+
+    case 'moving':
+      for(let pattern of patterns){
+        drawMovingPattern(pattern);
+      }
+      break;
   }
 }
 
@@ -368,11 +380,7 @@ function keyPressed(){
   }
 }
 
-// Function to handle mouse presses
-function mousePressed(){
-  // isLooping = !isLooping; // Toggle the animation loop state
-}
-
+// Function to handle mouse clicks
 function mouseClicked() {
   if (operationMode === 'still') {
     operationMode = 'changeColor';
@@ -381,6 +389,10 @@ function mouseClicked() {
     operationMode = 'changeColor';
     loop();
   }
+}
+// Function to handle mouse presses
+function mousePressed(){
+
 }
 
 // Function to handle mouse drags
