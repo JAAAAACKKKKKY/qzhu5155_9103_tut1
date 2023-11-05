@@ -3,14 +3,16 @@ let patterns = [];
 let circleDiameter;
 let spacing = 30; // Define space between circles
 
-// Global variable to store the current state
-let operationMode = 'rotating'; // Initial state: not rotating
+let islooping = false; // Initial state: not looping at start
 
-// Global variables to store the mouse state
-let overCircle = false; // Circle rollover
-let locked = false; // Circle locked
-let yoffset = 0.0; // Offset for moving circle
-let xoffset = 0.0; // Offset for moving circle
+// Global variable to store the current state
+let operationMode = 'still'; // Initial state: not rotating
+
+// // Global variables to store the mouse state
+// let overCircle = false; // Circle rollover
+// let locked = false; // Circle locked
+// let yoffset = 0.0; // Offset for moving circle
+// let xoffset = 0.0; // Offset for moving circle
 
 
 function setup() {
@@ -20,6 +22,8 @@ function setup() {
   // noLoop(); // Prevent p5.js from continuously redrawing the canvas
 
   circleDiameter = 200; // Define a fixed diameter for the circles
+
+  frameRate(8); // Set the frame rate to 20 frames per second
 
   // Calculate the number of circles that can fit in the canvas width (columns) and height (rows)
   let cols = ceil(width / (circleDiameter + spacing));
@@ -52,35 +56,29 @@ function setup() {
       });
     }
   }
-
-  // Draw each circle pattern on the canvas
-  for(let pattern of patterns) {
-    drawPattern(pattern);
-  }
 }
 
-// Function to draw an individual circle pattern
-function drawPattern(pattern) {
-
+// Use Function draw() to draw the animation
+function draw(){
   // Switch between the two states
   switch(operationMode){
     case 'still':
-      drawStillPattern(pattern);
+      for(let pattern of patterns){
+        drawPattern(pattern);
+      }
       break;
     
     case 'rotating':
-      drawRotatingPattern(pattern);
+      for(let pattern of patterns){
+        drawRotatingPattern(pattern);
+      }
       break;
   }
 }
 
 // Function to draw a still pattern which is Final Group Project Code
-function drawStillPattern(pattern){
-  
-  // Check if the mouse is over the circle
-  if(dist(mouseX, mouseY, pattern.x, pattern.y) < pattern.size / 2){
-    overCircle = true;
-  }
+function drawPattern(pattern){
+  // noLoop(); // Prevent p5.js from continuously redrawing the canvas
   
   // Draw the outer "pearl necklace" chain around each circle with the new pattern
   let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
@@ -167,26 +165,26 @@ function drawStillPattern(pattern){
 
 // Function to draw a rotating pattern
 function drawRotatingPattern(pattern){
-  // Draw the circle with the new pattern
-  let numCircle = 5; // Number of circles
-  let startRadius = 100; // Initial radius
-  let radiusStep = 20; // Decreasing radius
+  // Draw the outer "pearl necklace" chain around each circle with the new pattern
+  let outerRadius = pattern.size / 2 + 10; // Define the radius for the pearl chain
+  let pearls = [1, 1, 1, 0]; // Define the pattern of pearls (1 small, 1 small, 1 small, 0 large, and so on)
+  let pearlIndex = 0;
 
-  let rotateAngle = 0;
+  let numPearls = TWO_PI * outerRadius / 20;
+  for (let i = 0; i < numPearls; i++) {
+    let angle = i * TWO_PI / numPearls;
+    let pearlX = pattern.x + outerRadius * cos(angle);
+    let pearlY = pattern.y + outerRadius * sin(angle);
 
-  for(let i = 0; i < numCircle; i++){
+    if (pearls[pearlIndex] === 1) {
+      fill(random(255), random(255), random(255)); // Set the fill color for the small pearls
+      ellipse(pearlX, pearlY, 10); // Draw a small pearl
+    } else {
+      fill(255); // Set the fill color for the large pearls
+      ellipse(pearlX, pearlY, 20); // Draw a large pearl
+    }
 
-    translate(pattern.x, pattern.y);
-    rotate(rotateAngle);
-
-    let radius = startRadius - radiusStep * i;
-    
-    push();
-    ellipse(pattern.x, pattern.y, radius * 2);
-    fill(random(255), random(255), random(255)); // Set the fill color for the circle
-    pop();
-
-    rotateAngle += 0.1;
+    pearlIndex = (pearlIndex + 1) % pearls.length; // Move to the next pattern element
   }
 }
 
@@ -202,13 +200,12 @@ function keyPressed(){
 
 // Function to handle mouse presses
 function mousePressed(){
-  if(overCircle){
-    locked = true;
+  islooping = !islooping;
+  if(!islooping){
+    loop();
   }else{
-    locked = false;
+    noloop();
   }
-  xoffset = mouseX - pattern.x;
-  yoffset = mouseY - pattern.y;
 }
 
 // Function to handle mouse drags
